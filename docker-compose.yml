@@ -2,6 +2,29 @@ version: '2'
 
 services:
 
+  nginx-ssl-proxy:
+    image: danieldent/nginx-ssl-proxy
+    restart: always
+    environment:
+      #UPSTREAM: 
+      SERVERNAME: blog.corcra.us
+      EXTRANAMES: sabnzbd.corcra.us,sonarr.corcra.us,add.corcra.us,graphana.corcra.us,media.corcra.us
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /opt/appdata/nginx-conf:/etc/nginx/conf.d
+      - /opt/appdata/letsencrypt-corcra:/etc/letsencrypt
+
+ghost:
+  image: ghost:1-alpine
+  container_name: ghost
+  restart: always
+  ports: 
+    - 8085:2368
+  volumes:
+    - /opt/appdata/ghost:/var/lib/ghost/content
+
   sabnzbd:
     image: linuxserver/sabnzbd
     container_name: sabnzbd
