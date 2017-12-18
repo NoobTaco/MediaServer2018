@@ -47,11 +47,11 @@ services:
     volumes:
       - /opt/appdata/ghost:/var/lib/ghost/content
     environment:
-      - VIRTUAL_HOST=blog.corcra.us
-      - VIRTUAL_NETWORK=nginx-proxy
-      - VIRTUAL_PORT=2368
-      - LETSENCRYPT_HOST=blog.corcra.us
-      - LETSENCRYPT_EMAIL=mike@corcrastudio.com
+#      - VIRTUAL_HOST=blog.SOMEPLACE.COM
+#      - VIRTUAL_NETWORK=nginx-proxy
+#      - VIRTUAL_PORT=2368
+#      - LETSENCRYPT_HOST=blog.SOMEPLACE.COM
+#      - LETSENCRYPT_EMAIL=something@someplace.com
 
   sabnzbd:
     image: linuxserver/sabnzbd
@@ -67,11 +67,11 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=America/Los_Angeles
-      - VIRTUAL_HOST=sabnzbd.corcra.us
-      - VIRTUAL_NETWORK=nginx-proxy
-      - VIRTUAL_PORT=8080
-      - LETSENCRYPT_HOST=sabnzbd.corcra.us
-      - LETSENCRYPT_EMAIL=mike@corcrastudio.com
+#      - VIRTUAL_HOST=sabnzbd.SOMEPLACE.COM
+#      - VIRTUAL_NETWORK=nginx-proxy
+#      - VIRTUAL_PORT=8080
+#      - LETSENCRYPT_HOST=sabnzbd.SOMEPLACE.COM
+#      - LETSENCRYPT_EMAIL=something@someplace.com
   
   sonarr:
     image: linuxserver/sonarr
@@ -91,11 +91,11 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=America/Los_Angeles
-      - VIRTUAL_HOST=sonarr.corcra.us
-      - VIRTUAL_NETWORK=nginx-proxy
-      - VIRTUAL_PORT=8989
-      - LETSENCRYPT_HOST=sonarr.corcra.us
-      - LETSENCRYPT_EMAIL=mike@corcrastudio.com
+#      - VIRTUAL_HOST=sonarr.SOMEPLACE.COM
+#      - VIRTUAL_NETWORK=nginx-proxy
+#      - VIRTUAL_PORT=8989
+#      - LETSENCRYPT_HOST=sonarr.SOMEPLACE.COM
+#      - LETSENCRYPT_EMAIL=something@someplace.com
 
   mylar:
     image: linuxserver/mylar
@@ -154,11 +154,11 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=America/Los_Angeles
-      - VIRTUAL_HOST=plexpy.corcra.us
-      - VIRTUAL_NETWORK=nginx-proxy
-      - VIRTUAL_PORT=8181
-      - LETSENCRYPT_HOST=plexpy.corcra.us
-      - LETSENCRYPT_EMAIL=mike@corcrastudio.com
+#      - VIRTUAL_HOST=plexpy.SOMEPLACE.COM
+#      - VIRTUAL_NETWORK=nginx-proxy
+#      - VIRTUAL_PORT=8181
+#      - LETSENCRYPT_HOST=plexpy.SOMEPLACE.COM
+#      - LETSENCRYPT_EMAIL=something@someplace.com
   
   ombi:
     image: linuxserver/ombi
@@ -176,11 +176,11 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=America/Los_Angeles
-      - VIRTUAL_HOST=add.corcra.us
-      - VIRTUAL_NETWORK=nginx-proxy
-      - VIRTUAL_PORT=3579
-      - LETSENCRYPT_HOST=add.corcra.us
-      - LETSENCRYPT_EMAIL=mike@corcrastudio.com
+#      - VIRTUAL_HOST=add.SOMEPLACE.COM
+#      - VIRTUAL_NETWORK=nginx-proxy
+#      - VIRTUAL_PORT=3579
+#      - LETSENCRYPT_HOST=add.SOMEPLACE.COM
+#      - LETSENCRYPT_EMAIL=something@someplace.com
 
   influxdb:
     image: tutum/influxdb
@@ -210,11 +210,11 @@ services:
       - /opt/appdata/grafana:/var/lib/grafana
     restart: always
     environment:
-      - VIRTUAL_HOST=grafana.corcra.us
-      - VIRTUAL_NETWORK=nginx-proxy
-      - VIRTUAL_PORT=3000
-      - LETSENCRYPT_HOST=grafana.corcra.us
-      - LETSENCRYPT_EMAIL=mike@corcrastudio.com
+ #     - VIRTUAL_HOST=grafana.SOMEPLACE.COM
+ #     - VIRTUAL_NETWORK=nginx-proxy
+ #     - VIRTUAL_PORT=3000
+ #     - LETSENCRYPT_HOST=grafana.SOMEPLACE.COM
+ #     - LETSENCRYPT_EMAIL=something@someplace.com
 
   organizr:
     image: lsiocommunity/organizr
@@ -227,11 +227,11 @@ services:
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
-      - VIRTUAL_HOST=media.corcra.us
-      - VIRTUAL_NETWORK=nginx-proxy
-      - VIRTUAL_PORT=80
-      - LETSENCRYPT_HOST=media.corcra.us
-      - LETSENCRYPT_EMAIL=mike@corcrastudio.com
+#      - VIRTUAL_HOST=media.SOMEPLACE.COM
+#      - VIRTUAL_NETWORK=nginx-proxy
+#      - VIRTUAL_PORT=80
+#      - LETSENCRYPT_HOST=media.SOMEPLACE.COM
+#      - LETSENCRYPT_EMAIL=something@someplace.com
 
   portainer:
     image: portainer/portainer
