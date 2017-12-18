@@ -1,0 +1,147 @@
+version: '2'
+
+services:
+
+  sabnzbd:
+    image: linuxserver/sabnzbd
+    container_name: sabnzbd
+    volumes:
+      - /opt/appdata/sabnzbd:/config
+      - /mnt/BigPurple/downloads:/downloads
+      - /mnt/BigPurple/downloads/incomplete-downloads:/downloads/incomplete-downloads
+    ports:
+      - 8080:8080
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=America/Los_Angeles
+  
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    depends_on:
+      - sabnzbd
+    volumes:
+      - /opt/appdata/sonarr:/config
+      - /mnt/BigPurple/tv:/tv
+      - /mnt/BigPurple/downloads:/downloads
+    ports:
+      - 8989:8989
+    links:
+      - sabnzbd
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=America/Los_Angeles
+
+  mylar:
+    image: linuxserver/mylar
+    container_name: mylar
+    depends_on:
+      - sabnzbd
+    volumes:
+      - /opt/appdata/mylar:/config
+      - /mnt/BigPurple/downloads/comics:/downloads
+      - /mnt/BigPurple/comics:/comics
+    ports:
+      - 8090:8090
+    links:
+      - sabnzbd
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=America/Los_Angeles
+
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    volumes:
+      - /opt/appdata/plex:/config
+      - /mnt/BigPurple/tv:/data/tvshows
+      - /mnt/BigPurple/movies:/data/movies
+      - /mnt/BigPurple/transcode:/data/transcode
+    network_mode: host
+    restart: always
+    environment:
+      - VERSION=latest
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=America/Los_Angeles
+  
+  plexpy:
+    image: linuxserver/plexpy
+    container_name: plexpy
+    depends_on:
+      - plex
+    volumes:
+      - /opt/appdata/plexpy:/config
+      - /opt/appdata/plex/Library/Application\ Support/Plex\ Media\ Server/Logs:/logs:ro
+    ports:
+      - 8181:8181
+    links:
+      - plex
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=America/Los_Angeles
+  
+  ombi:
+    image: linuxserver/ombi
+    container_name: ombi
+    depends_on:
+      - plex
+    volumes:
+      - /opt/appdata/ombi:/config
+    ports:
+      - 3579:3579
+    links:
+      - plex
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=America/Los_Angeles
+
+  influxdb:
+    image: tutum/influxdb
+    container_name: influxdb
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+    ports:
+      - 8083:8083
+      - 8086:8086
+    volumes:
+      - /opt/appdata/influxdb:/data
+    
+  
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    depends_on: 
+      - influxdb
+    links:
+      - influxdb
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - /opt/appdata/grafana:/var/lib/grafana
+    restart: always
+
+  organizr:
+    image: lsiocommunity/organizr
+    container_name: organizr
+    volumes:
+      - /opt/appdata/organizr:/config
+    ports:
+      - 8077:80
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
