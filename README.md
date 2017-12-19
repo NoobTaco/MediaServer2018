@@ -128,14 +128,7 @@ Log into server
 ```bash
 sudo apt install docker-compose
 ```
-* Create a dockeruser
-```bash
-sudo useradd dockeruser
-```
-* Get the dockeruser ID - It should be 1001
-```bash
-id dockeruser
-```
+
 * Set the environment up
 
 ```bash
@@ -143,14 +136,12 @@ sudo pico /etc/environment
 ```
 * Paste these lines into the bottom of the file.
 ```
-PUID=1001
-PGID=1001
+PUID=1000
+PGID=1000
 ```
 * Set user and permissions for the server
 ```bash
-sudo chown dockeruser:dockeruser /mnt/BigPurple
 sudo chmod 777 -R /mnt/BigPurple
-sudo chmod 777 /opt
 ```
 
 ## Installing the Server using Docker Compose
@@ -158,7 +149,7 @@ sudo chmod 777 /opt
 * Check out this repository to your /opt directory.
 ```bash
 cd /opt
-sudo git clone https://github.com/NoobTaco/MediaServer2018.git .
+git clone https://github.com/NoobTaco/MediaServer2018.git .
 ```
 * Make edits to the docker-compose.yml file.
     * Change directory names to point to your directory structure. Again in this example I am using BigPurple
