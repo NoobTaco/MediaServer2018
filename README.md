@@ -149,7 +149,7 @@ PGID=1001
 * Set user and permissions for the server
 ```bash
 sudo chown dockeruser:dockeruser /mnt/BigPurple
-sudo chmod 777 /mnt/BigPurple
+sudo chmod 777 -R /mnt/BigPurple
 sudo chmod 777 /opt
 ```
 

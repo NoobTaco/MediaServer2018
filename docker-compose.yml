@@ -1,7 +1,9 @@
 version: '2'
 
 services:
-
+  ###
+  ### Nginx - Web server and Proxy
+  ###
   nginx:
       restart: always
       image: nginx
@@ -15,6 +17,9 @@ services:
         - "/usr/share/nginx/html"
         - "/opt/appdata/proxy/certs:/etc/nginx/certs:ro"
 
+  ###
+  ### Nginx - Creates the web server config files for the containers calling it.
+  ###
   nginx-gen:
       restart: always
       image: jwilder/docker-gen
@@ -26,6 +31,9 @@ services:
         - nginx
       entrypoint: /usr/local/bin/docker-gen -notify-sighup nginx -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
 
+  ###
+  ### Letsencrypt Nginx Proxy Companion - This is the majic sauce!
+  ###
   letsencrypt-nginx-proxy-companion:
       restart: always
       image: jrcs/letsencrypt-nginx-proxy-companion
@@ -72,7 +80,26 @@ services:
 #      - VIRTUAL_PORT=8080
 #      - LETSENCRYPT_HOST=sabnzbd.SOMEPLACE.COM
 #      - LETSENCRYPT_EMAIL=something@someplace.com
-  
+
+  hydra:
+    image: linuxserver/hydra
+    container_name: hydra
+    volumes:
+      - /opt/appdata/hydra:/config
+      - /mnt/BigPurple/downloads:/downloads
+    ports:
+      - 5075:5075
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=America/Los_Angeles
+#     - VIRTUAL_HOST=hydra.SOMEPLACE.COM
+#     - VIRTUAL_NETWORK=nginx-proxy
+#     - VIRTUAL_PORT=8080
+#     - LETSENCRYPT_HOST=hydra.SOMEPLACE.COM
+#     - LETSENCRYPT_EMAIL=something@someplace.com
+
   sonarr:
     image: linuxserver/sonarr
     container_name: sonarr
@@ -115,6 +142,11 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=America/Los_Angeles
+#      - VIRTUAL_HOST=sonarr.SOMEPLACE.COM
+#      - VIRTUAL_NETWORK=nginx-proxy
+#      - VIRTUAL_PORT=8989
+#      - LETSENCRYPT_HOST=sonarr.SOMEPLACE.COM
+#      - LETSENCRYPT_EMAIL=something@someplace.com
 
   plex:
     image: linuxserver/plex
@@ -126,9 +158,9 @@ services:
       - /mnt/BigPurple/transcode:/data/transcode
     network_mode: host
     restart: always
-###
-### Plex HW transcoding - Install NVIDIA drivers https://www.reddit.com/r/PleX/comments/749hnc/hardware_transcoding_with_plex_docker/
-###
+      ###
+      ### Plex HW transcoding - Install NVIDIA drivers https://www.reddit.com/r/PleX/comments/749hnc/hardware_transcoding_with_plex_docker/
+      ###
 #    devices:
 #      - /dev/dri:/dev/dri
     environment:
@@ -194,8 +226,7 @@ services:
       - 8086:8086
     volumes:
       - /opt/appdata/influxdb:/data
-    
-  
+      
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -216,22 +247,23 @@ services:
  #     - LETSENCRYPT_HOST=grafana.SOMEPLACE.COM
  #     - LETSENCRYPT_EMAIL=something@someplace.com
 
-  organizr:
-    image: lsiocommunity/organizr
-    container_name: organizr
+  muximux:
+    image: linuxserver/muximux
+    container_name: muximux
     volumes:
-      - /opt/appdata/organizr:/config
+      - /opt/appdata/muximux:/config
     ports:
-      - 8077:80
+      - 7777:80
     restart: always
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
-#      - VIRTUAL_HOST=media.SOMEPLACE.COM
-#      - VIRTUAL_NETWORK=nginx-proxy
-#      - VIRTUAL_PORT=80
-#      - LETSENCRYPT_HOST=media.SOMEPLACE.COM
-#      - LETSENCRYPT_EMAIL=something@someplace.com
+      - TZ=America/Los_Angeles
+    #  - VIRTUAL_HOST=media.SOMEPLACE.COM
+    #  - VIRTUAL_NETWORK=nginx-proxy
+    #  - VIRTUAL_PORT=80
+    #  - LETSENCRYPT_HOST=media.SOMEPLACE.COM
+    #  - LETSENCRYPT_EMAIL=something@someplace.com
 
   portainer:
     image: portainer/portainer
