@@ -1,7 +1,7 @@
 #######
 ##
 ## Media Server 2018 Guide by NoobTaco
-## version: 0.0.3
+## version: 0.0.4
 ##
 #######
 
@@ -177,7 +177,7 @@ services:
 #      - LETSENCRYPT_HOST=add.SOMEPLACE.COM
 #      - LETSENCRYPT_EMAIL=something@someplace.com
 
-muximux:
+  muximux:
     image: linuxserver/muximux
     container_name: muximux
     volumes:
