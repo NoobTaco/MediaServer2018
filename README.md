@@ -156,6 +156,10 @@ sudo chmod 777 /opt
 ## Installing the Server using Docker Compose
 
 * Check out this repository to your /opt directory.
+```bash
+cd /opt
+sudo git clone https://github.com/NoobTaco/MediaServer2018.git .
+```
 * Make edits to the docker-compose.yml file.
     * Change directory names to point to your directory structure. Again in this example I am using BigPurple
     

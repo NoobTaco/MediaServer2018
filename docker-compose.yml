@@ -54,7 +54,7 @@ services:
       - 8085:2368
     volumes:
       - /opt/appdata/ghost:/var/lib/ghost/content
-    environment:
+#    environment:
 #      - VIRTUAL_HOST=blog.SOMEPLACE.COM
 #      - VIRTUAL_NETWORK=nginx-proxy
 #      - VIRTUAL_PORT=2368
@@ -226,7 +226,7 @@ services:
       - 8086:8086
     volumes:
       - /opt/appdata/influxdb:/data
-      
+
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -240,7 +240,7 @@ services:
     volumes:
       - /opt/appdata/grafana:/var/lib/grafana
     restart: always
-    environment:
+ #   environment:
  #     - VIRTUAL_HOST=grafana.SOMEPLACE.COM
  #     - VIRTUAL_NETWORK=nginx-proxy
  #     - VIRTUAL_PORT=3000
