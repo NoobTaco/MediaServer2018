@@ -1,4 +1,27 @@
-# Docker Media Computer 2018
+# Docker Media Server 2018
+
+This guide will step you through installing Ubuntu server 16.04 and several home media applications. We will use docker-compose which to give us the power and flexibility to keep our new server up to date and rock solid.
+
+We will be installing the following applications.
+
+### Media Servers and Services
+
+* Sabnzb - https://sabnzbd.org/
+* Hyrdra - https://github.com/theotherp/nzbhydra
+* Sonarr - https://sonarr.tv/
+* Plex - https://www.plex.tv/
+* Plexpy - https://github.com/JonnyWong16/plexpy
+* OMBI - https://github.com/tidusjar/Ombi
+* MuxiMux - https://github.com/mescon/Muximux
+* Mylar - https://github.com/evilhero/mylar
+
+### System Tools
+
+* Influxdb - https://www.influxdata.com/
+* Grafana - https://grafana.com/
+* Portainer - https://portainer.io/
+
+# Tutorial Walkthrough
 
 ## Ubuntu
 
@@ -29,7 +52,7 @@
 
 * Log into the server to get the IP address. Type `ip a` for your servers ip address. Or check your router to see what ip it was given.
 
-* You can now loginto your server via SSH using Bash in windows 10 `ssh username@ip`
+* You can now log into your server via SSH using Bash in windows 10 `ssh username@ip`
 
 ```bash
 ssh username@192.168.1.40 - example
@@ -46,7 +69,7 @@ sudo apt upgrade
 
 * Shutdown the server and power off using the command `sudo poweroff`
 * Install the data drives into the server and power up.
-* Check if the disks are now visible ot the system by issuing `lsblk`. You shoudl see the disks. ex.
+* Check if the disks are now visible t0 the system by issuing `lsblk`. You should see the disks. ex.
   * sdb
   * sdc
   * sdc
@@ -96,7 +119,7 @@ sudo mkdir /mnt/BigPurple
     sudo mount -o compress=zlib,subvol=BigPurple,autodefrag /dev/sdb /mnt/BigPurple
     ```
 
-* Adding other drives to the BTRFS filesystem.
+* Adding other drives to the BTRFS file system.
 
     * Add all the remaing drives one by one. Do this for each drive untill they are all a part of the BigPurple filesystem
 
@@ -165,22 +188,15 @@ sudo mkdir /mnt/BigPurple
 * Set the environment up
 
     ```bash
-    sudo pico /etc/environment
+    sudo nano /etc/environment
     ```
 
-* Paste these lines into the bottom of the file.
+* Paste these lines into the bottom of the file. This will be your user ID. 
 
     ```
     PUID=1000
     PGID=1000
     ```
-
-* Set user and permissions for the server
-
-    ```bash
-    sudo chmod 777 -R /mnt/BigPurple
-    ```
-
 ## Installing the Server using Docker Compose
 
 * Check out this repository to your /opt directory. Be sure to have the period/full stop, at the end of the git clone line.
@@ -193,12 +209,18 @@ sudo mkdir /mnt/BigPurple
 * Make edits to the docker-compose.yml file.
     * Change directory names to point to your directory structure. Again in this example I am using BigPurple.
 
+    ```bash
+    nano /opt/docker-compose.yml
+    ```
+
+    * Save by hitting ctrl-x, say Y and enter
+
 ## Adding SSL Proxy settings
 
 _Optional_
 
-If you wish to use ssl proxy domain names for your server then uncoment the following containers:
-* ngnix
+If you wish to use ssl proxy domain names for your server then uncomment the following containers:
+* nginx
 * nginx-gen
 * letsencrypt-nginx-proxy-companion
 
@@ -230,3 +252,59 @@ sudo docker-compose -f /opt/docker-compose.yml up -d
 If you are using the SSL proxy please be patient as it can take a while to generate the certs. 
 
 You can check the status of your servers by issuing `docker ps` to list the running containers.
+
+***IMPORTANT!***
+
+Once docker-compose brings everything up you will need to set permissions and ownership of the data file structure for everything to work. I have not found a way to do this during the first run of the containers yet.
+
+Issue the following command to allow all containers to use the data drive. Remember to use your directory names. Use your username instead of noobtaco.
+
+```bash
+sudo chown -R noobtaco:noobtaco /mnt/BigPurple
+sudo chmod -R 777 /mnt/BigPurple
+```
+
+## Configure your Servers and Services
+
+Navigate to your services and configure them. I suggest this order.
+
+### Media Servers and Services
+
+* Sabnzb - http://yourserverip:8080
+* Hyrdra - http://yourserverip:5075
+* Sonarr - http://yourserverip:8989
+* Plex - http://yourserverip:32400/web
+* Plexpy - http://yourserverip:8181
+* OMBI - http://yourserverip:3579
+* MuxiMux - http://yourserverip:7777
+* Mylar - http://yourserverip:8090
+
+### System Tools
+
+* Influxdb - Follow directions on how to create a database. Web interface is active. DO NOT EXPOSE!!
+* Grafana - http://yourserverip:3000
+* Portainer - http://yourserverip:9000
+
+## Update Your Server
+
+There are 3 main areas that you will want to focus on updating on your new system.
+
+* Ubuntu's operating system and applications. 
+    * Durring installation we chose to have the system update itself. However it never hurts to do a manual check every now and again.
+
+    ```bash
+    sudo apt update
+    sudo apt upgrade
+    ```
+
+* Docker Containers
+    * We can check for updates to container images by taking the server down then checking for updates.
+
+    ```bash
+    docker-compose -f /opt/docker-compose.yml down
+    docker-compose -f /opt/docker-compose.yml pull
+    docker-compose -f /opt/docker-compose.yml up -d
+    ```
+
+* BTRFS File System
+    * (Placeholder)
