@@ -55,7 +55,7 @@ We will be installing the following applications.
 * You can now log into your server via SSH using Bash in windows 10 `ssh username@ip`
 
 ```bash
-ssh username@192.168.1.40 - example
+ssh username@youripaddress
 ```
 
 * Update and install upgrades
@@ -185,29 +185,32 @@ sudo mkdir /mnt/BigPurple
     sudo apt install docker-compose
     ```
 
-* Set the environment up
-
-    ```bash
-    sudo nano /etc/environment
-    ```
-
-* Paste these lines into the bottom of the file. This will be your user ID. 
-
-    ```
-    PUID=1000
-    PGID=1000
-    ```
 ## Installing the Server using Docker Compose
 
 * Check out this repository to your /opt directory. Be sure to have the period/full stop, at the end of the git clone line.
 
     ```bash
     cd /opt
-    git clone https://github.com/NoobTaco/MediaServer2018.git .
+    sudo git clone https://github.com/NoobTaco/MediaServer2018.git .
+    ```
+* Set permissions
+
+    ```bash
+    sudo chown -R yourusername:yourusername /opt/*
+    ```
+* Edit the environments file to reflect your servers file locations, time zone and user ID.
+
+    ```bash
+    sudo nano /opt/.env
     ```
 
+    * CONFIG_DIR - You should keep this pointing to /opt/appdata unless you edit the docker-compose.yml file to reflect changes
+    * MEDIA - Set this to where you want your media files stored. 
+    * TZ - Set to your time zone.
+    * PUID and PGID should be 1000 for your main user.
+
 * Make edits to the docker-compose.yml file.
-    * Change directory names to point to your directory structure. Again in this example I am using BigPurple.
+    * Make changes to the docker-compose file to reflect your server. You can comment out service blocks if you do not wish to use that service. 
 
     ```bash
     nano /opt/docker-compose.yml
@@ -246,7 +249,8 @@ Your MUST have port 443 and 80 open on your router as well as have your domain r
 Navigate to your /opt directory and issue the following command to start downloading and starting all the servers.
 
 ```bash
-sudo docker-compose -f /opt/docker-compose.yml up -d
+cd /opt
+docker-compose up -d
 ```
 
 If you are using the SSL proxy please be patient as it can take a while to generate the certs. 
@@ -301,9 +305,10 @@ There are 3 main areas that you will want to focus on updating on your new syste
     * We can check for updates to container images by taking the server down then checking for updates.
 
     ```bash
-    docker-compose -f /opt/docker-compose.yml down
-    docker-compose -f /opt/docker-compose.yml pull
-    docker-compose -f /opt/docker-compose.yml up -d
+    cd /opt
+    docker-compose down
+    docker-compose pull
+    docker-compose up -d
     ```
 
 * BTRFS File System
