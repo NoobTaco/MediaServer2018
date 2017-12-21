@@ -218,31 +218,7 @@ sudo mkdir /mnt/BigPurple
 
     * Save by hitting ctrl-x, say Y and enter
 
-## Adding SSL Proxy settings
 
-_Optional_
-
-If you wish to use ssl proxy domain names for your server then uncomment the following containers:
-* nginx
-* nginx-gen
-* letsencrypt-nginx-proxy-companion
-
-Then add or uncomment the following blocks of environment settings for each container you wish to have outward exposure.
-
-```
-    environment:
-      - VIRTUAL_HOST=something.something.com
-      - VIRTUAL_NETWORK=nginx-proxy
-      - VIRTUAL_PORT=2368
-      - LETSENCRYPT_HOST=something.something.com
-      - LETSENCRYPT_EMAIL=some@email.com
-```
-
-For example. To expose the Ghost blog with proxy to blog.something.com simply change the VIRTUAL_HOST to blog.something.com as well as the LETSENCRYPT_HOST.  The port is the container port, and not the port you expose.
-
-After you bring the server up, letsencrypt will check to see if it has a valid SSL cert. Will grab a new one if it does not and will forward all incoming requests to https://blog.something.com  
-
-Your MUST have port 443 and 80 open on your router as well as have your domain register set to send the subdomains to your server.
 
 ## Starting the Server
 
@@ -252,8 +228,6 @@ Navigate to your /opt directory and issue the following command to start downloa
 cd /opt
 docker-compose up -d
 ```
-
-If you are using the SSL proxy please be patient as it can take a while to generate the certs. 
 
 You can check the status of your servers by issuing `docker ps` to list the running containers.
 

@@ -176,18 +176,19 @@ services:
       - TZ=${TZ}
 
   influxdb:
-    image: tutum/influxdb
+    image: influxdb
     container_name: influxdb
     restart: always
     environment:
+      - INFLUXDB_ADMIN_ENABLED=true
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
     ports:
-      - 8083:8083
       - 8086:8086
+      - 8083:8083
     volumes:
-      - ${CONFIG_DIR}/influxdb:/data
+      - ${CONFIG_DIR}/influxdb:/var/lib/influxdb
 
   grafana:
     image: grafana/grafana
